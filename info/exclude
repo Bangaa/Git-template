@@ -1,0 +1,7 @@
+# Exclusion de archivos estandar, de respaldo o archivos temporales creados por 
+# los editores de texto.
+# Los archivos ignorados por el lenguaje deberian incluirse en el archivo 
+# «.gitignore» del proyecto.
+
+*.sw[op]
+*~*
