@@ -1,0 +1,40 @@
+#!/bin/bash
+# 
+# Gancho que hace un respaldo de la rama master cada vez que se hace un commit 
+# en la misma rama.
+# El formato de salida por defecto es
+#
+#   YYYYMMDD-<hora>-<author>.tar.gz
+#
+# donde YYYY es el año, MM es el mes y DD es el dia.
+# 
+# La variable prefijo indica el nombre de la carpeta donde se ubican los 
+# archivos traceados, como la carpeta src/, doc/, el Makefile, etc. Por defecto 
+# la variable no tiene valor, es decir, los archivos se encuentran directamente 
+# dentro de la carpeta comprimida; no hay subcarpeta.
+
+
+author=`git config user.name`
+
+# quita los espacios en blanco si los tuviera
+author=${author//\ /_}
+fecha=`date +%Y%m%d-%R`
+
+nombre_zip="$fecha"-"$author"
+
+prefijo=""
+
+branch=`git branch | grep "*"`
+
+if [[ "$branch" = "* master" ]]
+then
+	if [[ -n "$prefijo" ]]
+	then
+		git archive master --prefix="$prefijo" > "$nombre_zip".tar.gz
+	else
+		git archive master > "$nombre_zip".tar.gz
+	fi
+else
+	exit 1
+fi
+
